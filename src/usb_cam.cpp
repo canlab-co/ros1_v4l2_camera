@@ -34,6 +34,7 @@
  *
  *********************************************************************/
 
+#include <cv_bridge/cv_bridge.h>
 #include <linux/videodev2.h>
 #include <ros/ros.h>
 #include <sstream>
@@ -128,7 +129,6 @@ UsbCam::UsbCam():
     node.getParam("pixel_format", pixel_format_name);
     node.getParam("color_format", color_format_name);
     node.param<bool>("create_suspended", create_suspended, false);
-    node.param<bool>("full_ffmpeg_log", full_ffmpeg_log, false);
     node.getParam("camera_name", camera_name);
     node.getParam("camera_frame_id", camera_frame_id);
     node.param<std::string>("camera_transport_suffix", camera_transport_suffix, "image_raw");
@@ -148,7 +148,7 @@ UsbCam::UsbCam():
              io_method_name.c_str(),
              pixel_format_name.c_str(),
              framerate);
-    _image_pub = image_transport->advertiseCamera(camera_transport_suffix, 1);
+    _image_pub = image_transport->advertiseCamera(video_device_name + "/" + camera_transport_suffix, 1);
     image_pub = &_image_pub;
     camera_info = new camera_info_manager::CameraInfoManager(node, camera_name, camera_info_url);
     img_msg->header.frame_id = camera_frame_id;
@@ -191,7 +191,6 @@ UsbCam::UsbCam():
         return;
     }
     /* Device opened, creating parameter grabber*/
-    v4l_query_controls();
     /* Dynamically created V4L2 parameters */
     ROS_WARN("NOTE: the parameters generated for V4L intrinsic camera controls will be placed under namespace 'intrinsic_controls'");
     ROS_INFO("Use 'intrinsic_controls/ignore' list to enumerate the controls provoking errors or the ones you just want to keep untouched");
@@ -249,20 +248,6 @@ UsbCam::UsbCam():
     if(!ignored.empty())
         for(auto n: ignored)
             ignore_controls.insert(n);
-    /*
-    node.param<int>("exposure", exposure, 100);
-    node.param<int>("brightness", brightness, -1);
-    node.param<int>("contrast", contrast, -1);
-    node.param<int>("saturation", saturation, -1);
-    node.param<int>("sharpness", sharpness, -1);auto
-    node.param<int>("focus", focus, -1);
-    node.param<int>("white_balance", white_balance, 4000);
-    node.param<int>("gain", gain, -1);
-    node.param<bool>("autofocus", autofocus, false);
-    node.param<bool>("autoexposure", autoexposure, true);
-    node.param<bool>("auto_white_balance", auto_white_balance, false);
-    */
-    adjust_camera();
 
     // Creating timer
     ros::Duration frame_period(1.f / static_cast<float>(framerate));
@@ -282,30 +267,34 @@ void UsbCam::frame_timer_callback(const ros::TimerEvent &event)
 {
     if(streaming_status)
     {
-        camera_image_t* new_image = read_frame();
-        if(new_image == nullptr)
+        camera_image_t* buffer = read_frame();
+        if(buffer == nullptr)
         {
             ROS_ERROR("Video4linux: frame grabber failed");
             return;
         }
-        img_msg->header.stamp.sec = new_image->stamp.tv_sec;
-        img_msg->header.stamp.nsec = new_image->stamp.tv_nsec;
-        if (img_msg->data.size() != static_cast<size_t>(new_image->step * new_image->height))
+        img_msg->header.stamp.sec = buffer->stamp.tv_sec;
+        img_msg->header.stamp.nsec = buffer->stamp.tv_nsec;
+        if (img_msg->data.size() != static_cast<size_t>(buffer->step * buffer->height))
         {
-            img_msg->width = new_image->width;
-            img_msg->height = new_image->height;
-            img_msg->encoding = new_image->encoding;
-            img_msg->step = new_image->step;
-            //img_msg->data.resize(new_image->step * new_image->height);
+            img_msg->width = buffer->width;
+            img_msg->height = buffer->height;
+            img_msg->step = buffer->step;
+            img_msg->encoding = "yuv422";
         }
         // Fill in image data
-        // memcpy(&img_msg->data[0], new_image->image, img_msg->data.size());
+        // memcpy(&img_msg->data[0], buffer->image, img_msg->data.size());
         // Direct assignment from constant length array: removes blinking on some integrated webcam systems using mmap access mode
         // To be reworked if the plugin architecture planned to be implemented
-        img_msg->data.assign(new_image->image, new_image->image + (new_image->step * new_image->height));
+        img_msg->data.assign(buffer->image, buffer->image + buffer->image_size);
         auto ci = std::make_unique<sensor_msgs::CameraInfo>(camera_info->getCameraInfo());
         ci->header = img_msg->header;
-        image_pub->publish((*img_msg), (*ci));
+        if (img_msg->encoding != "yuv422")
+        {
+            auto cv_image = cv_bridge::toCvCopy(*img_msg, img_msg->encoding);
+            cv_image->toImageMsg(*img_msg);
+        }
+        image_pub->publish(*img_msg, *ci);
     }
 }
 

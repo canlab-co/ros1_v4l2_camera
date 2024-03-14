@@ -6,7 +6,7 @@ io_method: mmap                     # I/O method
                                     # - read - for devices supporting virtual filesystem or block I/O
                                     # - mmap - for devices with direct libusb memory mapping
                                     # - userptr - for userspace devices supporting userspace pointer exchange
-pixel_format: yuyv                  # Pixel format for Video4linux device (also selects decoder mode)
+pixel_format: uyvy                  # Pixel format for Video4linux device (also selects decoder mode)
                                         # https://wiki.videolan.org/YUV#YUV_4:2:0_.28I420.2FJ420.2FYV12.29
                                         # - yuyv - YUV420
                                         # - yuv - synonym for yuyv
@@ -28,8 +28,8 @@ camera_name: head_camera            # ROS internal name for the camera, used to 
 camera_frame_id: head_camera        # Frame ID used to generate coordinate transformations
 camera_transport_suffix: image_raw  # Suffix used by image_transport to generate topic names
 camera_info_url: ""                 # URI for camera calibration data (likely a YML file obtained from camera_calibration)
-image_width: 640                    # Frame dimensions, should be supported by camera hardware
-image_height: 480
+image_width: 1920                    # Frame dimensions, should be supported by camera hardware
+image_height: 1080
 framerate: 30                       # Camera polling frequency, Hz (integer)
 
 # Auxiliary camera parameters provided by libv4l2.
@@ -41,10 +41,10 @@ framerate: 30                       # Camera polling frequency, Hz (integer)
     # It is also possible to have a list of the available control names using v4l2-ctl application from v4l2-util package:
     # v4l2-ctl --device=/dev/video<ID> -L
 intrinsic_controls:                 
-    focus_auto: true
-    exposure_auto_priority: true
+    focus_auto: false
+    exposure_auto_priority: false
     exposure_auto: 3
-    white_balance_temperature_auto: true
+    white_balance_temperature_auto: false
     power_line_frequency: 1
     ignore: [
         brightness,

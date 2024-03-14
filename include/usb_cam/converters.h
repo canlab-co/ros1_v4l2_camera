@@ -14,10 +14,9 @@ namespace converters
 /* Helper functions and table converters */
 io_method_t io_method_from_string(const std::string & str);
 pixel_format_t pixel_format_from_string(const std::string & str);
-std::string pixel_format_to_string(const uint32_t & pixelformat);
 color_format_t color_format_from_string(const std::string & str);
-unsigned int v4l_pixel_format_from_pixel_format(const pixel_format_t& pixelformat, bool& mono);
-std::string v4l_control_name_to_param_name(const char *name);
+unsigned int v4l_pixel_format_from_pixel_format(const pixel_format_t& pixelformat);
+std::string pixel_format_to_string(const uint32_t & pixelformat);
 
 /* Standalone format converters */
 /**
@@ -41,34 +40,11 @@ std::string v4l_control_name_to_param_name(const char *name);
  * [ B ]   [  1.0   2.041   0.002 ] [ V ]
  *
  */
-bool YUV2RGB(const unsigned char & y,
-             const unsigned char & u,
-             const unsigned char & v,
-             unsigned char * r,
-             unsigned char * g,
-             unsigned char * b);
-bool MONO102MONO8(const char * RAW,
-                  char * & MONO,
-                  const int & NumPixels);
-bool YUYV2RGB(const char * YUV,
-              char * & RGB,
-              const int & NumPixels);
-bool COPY2RGB(const char * input,
-              char * & output,
-              const int & NumPixels);
-bool YUV4202RGB(char * YUV,
-                char * & RGB,
-                const int & width,
-                const int & height);
-std::string FCC2S(const unsigned int & val);
-bool UYVY2RGB(const char * YUV,
-              char * & RGB,
-              const int & NumPixels);
 
-}
+} // namespace converters
 
-}
+} // namespace util
 
-}
+} // namespace usb_cam
 
 #endif // USB_CAM_CONVERTERS_H

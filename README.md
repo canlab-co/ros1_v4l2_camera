@@ -1,27 +1,74 @@
-# [usb_cam](http://wiki.ros.org/usb_cam)
-[![ROS1 CI](https://github.com/ros-drivers/usb_cam/actions/workflows/main.yml/badge.svg)](https://github.com/ros-drivers/usb_cam/actions/workflows/main.yml)
-[![ROS2 CI](https://github.com/ros-drivers/usb_cam/actions/workflows/build_test.yml/badge.svg)](https://github.com/ros-drivers/usb_cam/actions/workflows/build_test.yml)
+# v4l2_camera
 
-## Versions up to 0.3.7
-The last ROS 1 version of this package based on "classic" old code of FFMPEG and `libv4l2` is `0.3.7`, currently available via ROS package repository. The `develop` branch of this repository is now based on the **new version of code** with different internal API and configuration process. Please refer to [this page](http://wiki.ros.org/usb_cam/Old%20Versions) on ROS wiki to learn more about how to configure older versions of this package.
+A ROS 1 camera driver using Video4Linux2 For Canlab (V4L2).
 
-## A ROS Driver for V4L USB Cameras
+### System Requirements
 
-This package is based off of V4L devices specifically instead of just UVC.
+Requirements:
+  * CANLAB CLEB-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/RDC/pages/463274142/CLEB-G-01A+User+guide)
+  * CANLAB CLV-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/RDC/pages/464913242/CLV-G-Series+User+guide)
+  * [ROS 1 Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu)
 
-For full documentation, see [the ROS wiki](http://ros.org/wiki/usb_cam).
+### Download Pacakage
+If you need to modify the code or ensure you have the latest update you will need to clone this repo then build the package.
 
-[Doxygen](http://docs.ros.org/indigo/api/usb_cam/html/) files can be found on the ROS wiki.
+    $ mkdir -p ~/catkin_ws/src
+    $ cd ~/catkin_ws/src
+    $ git clone --branch noetic https://github.com/canlab-co/ros1_v4l2_camera.git
+    $ cd ~/catkin_ws
+    $ catkin_make
+    $ source devel/setup.bash
 
-## ROS2 branch
+### Usage
+Publish camera images, using the default parameters:
 
-If you want to use ROS2 version,
-please check [ros2](https://github.com/ros-drivers/usb_cam/tree/ros2) branch.
+        # launch the usb_cam executable
+        CLEB-G-01A : roslaunch usb_cam v4l2_camera_cleb.launch
+        CLV-G-Series : roslaunch usb_cam v4l2_camera_clv.launch
+        
+        # run the executable with default settings:        
+        1CH : rosrun usb_cam usb_cam_node (default : /dev/video0)
+Preview the image (open another terminal):
 
-## License
+        rosrun rqt_image_view rqt_image_view
 
-usb\_cam is released with a BSD license. For full terms and conditions, see the [LICENSE](LICENSE) file.
+## Nodes
 
-## Authors
+### usb_cam_node
 
-See the [AUTHORS](AUTHORS.md) file for a full list of contributors.
+The `usb_cam_node` interfaces with standard V4L2 devices and
+publishes images as `sensor_msgs/Image` messages.
+
+#### Published Topics
+
+* `/image_raw` - `sensor_msgs/Image`
+
+    The image.
+
+#### Parameters
+
+* `video_device` - `string`, default: `"/dev/video0"`
+
+    The device the camera is on.
+
+* `pixel_format` - `string`, default: `"UYVY"`
+
+    The pixel format to request from the camera. Must be a valid four
+    character '[FOURCC](http://fourcc.org/)' code [supported by
+    V4L2](https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/videodev.html)
+    and by your camera. The node outputs the available formats
+    supported by your camera when started.  
+    Currently supported: `"UYVY"`
+
+* `output_encoding` - `string`, default: `"yuv422"`
+
+    The encoding to use for the output image.  
+    Currently supported: `"yuv422"`.  
+  
+* `image_size` - `integer_array`, default: `[1920, 1080]`
+
+    Width and height of the image.
+
+* Camera Control Parameters
+
+    Not Support

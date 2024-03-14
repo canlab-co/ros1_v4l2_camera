@@ -42,5 +42,6 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "usb_cam");
     usb_cam::UsbCam& camera = usb_cam::UsbCam::Instance();
     ros::spin();
+    
     return 0;
 }

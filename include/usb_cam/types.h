@@ -73,31 +73,20 @@ static const int clipping_table_offset = 128;
 
 enum io_method_t
 {
-    IO_METHOD_READ,
     IO_METHOD_MMAP,
-    IO_METHOD_USERPTR,
     IO_METHOD_UNKNOWN,
     };
 
 
 enum pixel_format_t
 {
-    PIXEL_FORMAT_YUYV,
     PIXEL_FORMAT_UYVY,
-    PIXEL_FORMAT_MJPEG,
-    PIXEL_FORMAT_YUVMONO10,
-    PIXEL_FORMAT_RGB24,
-    PIXEL_FORMAT_BGR24,
-    PIXEL_FORMAT_GREY,
-    PIXEL_FORMAT_YU12,
-    PIXEL_FORMAT_H264,
     PIXEL_FORMAT_UNKNOWN
 };
 
 
 enum color_format_t
 {
-    COLOR_FORMAT_YUV420P,
     COLOR_FORMAT_YUV422P,
     COLOR_FORMAT_UNKNOWN,
 };
