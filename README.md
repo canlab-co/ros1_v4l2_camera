@@ -7,6 +7,7 @@ A ROS 1 camera driver using Video4Linux2 For Canlab (V4L2).
 Requirements:
   * CANLAB CLEB-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/486768641/CLEB-G-01A+User+guide)
   * CANLAB CLV-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/459735068/CLV-G-Series+User+guide)
+  * CANLAB CLMU-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/485818369/CLMU-G-01A+User+guide)
   * [ROS 1 Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu)
 
 ### Download Pacakage
@@ -25,6 +26,7 @@ Publish camera images, using the default parameters:
         # launch the usb_cam executable
         CLEB-G-01A : roslaunch usb_cam v4l2_camera_cleb.launch
         CLV-G-Series : roslaunch usb_cam v4l2_camera_clv.launch
+        CLMU-G-01A : roslaunch usb_cam v4l2_camera_clmu.launch
         
         # run the executable with default settings:        
         1CH : rosrun usb_cam usb_cam_node (default : /dev/video0)
