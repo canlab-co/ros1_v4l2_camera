@@ -5,9 +5,9 @@ A ROS 1 camera driver using Video4Linux2 For Canlab (V4L2).
 ### System Requirements
 
 Requirements:
-  * CANLAB CLEB-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/486768641/CLEB-G-01A+User+guide)
-  * CANLAB CLV-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/459735068/CLV-G-Series+User+guide)
-  * CANLAB CLMU-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/485818369/CLMU-G-01A+User+guide)
+  * CANLAB CLEB-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/683507863/CLEB-G-01A+User+guide)
+  * CANLAB CLV-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/459735068/CLV-200N+CLV-G-NVP2650D+User+guide)
+  * CANLAB CLMU-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/753270785/CLMU-G-01A+User+guide)
   * [ROS 1 Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu)
 
 ### Download Pacakage
