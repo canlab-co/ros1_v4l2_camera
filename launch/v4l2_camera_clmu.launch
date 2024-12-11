@@ -1,20 +1,49 @@
 <launch>
-  <!-- camera resolution -->
-  <arg name="img_w" default="1920" />
-  <arg name="img_h" default="1080" />
+  <arg name="image_size" default="[1920, 1080]" />
+  <arg name="img_w" value="$(eval eval(arg('image_size'))[0])" />
+  <arg name="img_h" value="$(eval eval(arg('image_size'))[1])" />
+  <arg name="cam" default="6" />
   
-  <node name="cam1" pkg="usb_cam" type="usb_cam_node" output="screen" >
+  <node name="cam1" pkg="usb_cam" type="usb_cam_node" output="screen" if="$(eval arg('cam') >= 1)">
       <rosparam command="load" file="$(find usb_cam)/config/usb_cam.yml"/>
       <param name="video_device" value="/dev/video0" />
       <param name="image_width" value="$(arg img_w)" />
       <param name="image_height" value="$(arg img_h)" />
   </node>
-  
-  <node name="cam2" pkg="usb_cam" type="usb_cam_node" output="screen" >
+
+  <node name="cam2" pkg="usb_cam" type="usb_cam_node" output="screen" if="$(eval arg('cam') >= 2)">
       <rosparam command="load" file="$(find usb_cam)/config/usb_cam.yml"/>
       <param name="video_device" value="/dev/video1" />
       <param name="image_width" value="$(arg img_w)" />
       <param name="image_height" value="$(arg img_h)" />
   </node>
-  
+
+  <node name="cam3" pkg="usb_cam" type="usb_cam_node" output="screen" if="$(eval arg('cam') >= 3)">
+      <rosparam command="load" file="$(find usb_cam)/config/usb_cam.yml"/>
+      <param name="video_device" value="/dev/video2" />
+      <param name="image_width" value="$(arg img_w)" />
+      <param name="image_height" value="$(arg img_h)" />
+  </node>
+
+  <node name="cam4" pkg="usb_cam" type="usb_cam_node" output="screen" if="$(eval arg('cam') >= 4)">
+      <rosparam command="load" file="$(find usb_cam)/config/usb_cam.yml"/>
+      <param name="video_device" value="/dev/video3" />
+      <param name="image_width" value="$(arg img_w)" />
+      <param name="image_height" value="$(arg img_h)" />
+  </node>
+
+  <node name="cam5" pkg="usb_cam" type="usb_cam_node" output="screen" if="$(eval arg('cam') >= 5)">
+      <rosparam command="load" file="$(find usb_cam)/config/usb_cam.yml"/>
+      <param name="video_device" value="/dev/video4" />
+      <param name="image_width" value="$(arg img_w)" />
+      <param name="image_height" value="$(arg img_h)" />
+  </node>
+
+  <node name="cam6" pkg="usb_cam" type="usb_cam_node" output="screen" if="$(eval arg('cam') >= 6)">
+      <rosparam command="load" file="$(find usb_cam)/config/usb_cam.yml"/>
+      <param name="video_device" value="/dev/video5" />
+      <param name="image_width" value="$(arg img_w)" />
+      <param name="image_height" value="$(arg img_h)" />
+  </node>
+
 </launch>
