@@ -5,9 +5,9 @@ A ROS 1 camera driver using Video4Linux2 For Canlab (V4L2).
 ### System Requirements
 
 Requirements:
-  * CANLAB CLEB-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/683507863/CLEB-G-01A+User+guide)
-  * CANLAB CLV-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/459735068/CLV-200N+CLV-G-NVP2650D+User+guide)
-  * CANLAB CLMU-G-01A [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/753270785/CLMU-G-01A+User+guide)
+  * CANLAB CLEB-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/485065636/CLEB-G-Series)
+  * CANLAB CLV-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/453214214/CLV-G-Series)
+  * CANLAB CLMU-G-Series [(GUIDE)](https://can-lab.atlassian.net/wiki/spaces/CANLABGUID/pages/484966555/CLMU-G-Series)
   * [ROS 1 Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu)
 
 ### Download Pacakage
@@ -18,18 +18,30 @@ If you need to modify the code or ensure you have the latest update you will nee
     $ git clone --branch noetic https://github.com/canlab-co/ros1_v4l2_camera.git
     $ cd ~/catkin_ws
     $ catkin_make
-    $ source devel/setup.bash
+    $ source ~/catkin_ws/devel/setup.bash
 
 ### Usage
-Publish camera images, using the default parameters:
+Publish camera images, using the parameters:
 
         # launch the usb_cam executable
         CLEB-G-01A : roslaunch usb_cam v4l2_camera_cleb.launch
         CLV-G-Series : roslaunch usb_cam v4l2_camera_clv.launch
-        CLMU-G-01A : roslaunch usb_cam v4l2_camera_clmu.launch
-        
+
+        /* CLMU-G-Series */
+        # CLCC-G-01X
+        roslaunch usb_cam v4l2_camera_clmu.launch image_size:="[1920, 1080]" cam:={x}
+        # CLCC-G-02X
+        roslaunch usb_cam v4l2_camera_clmu.launch image_size:="[2048, 1280]" cam:={x}
+
+Note: If the number of camera channels you want to use is 3, you can enter cam:=3. default is 6.
+
+        1CH camera (1 node)
         # run the executable with default settings:        
-        1CH : rosrun usb_cam usb_cam_node (default : /dev/video0)
+        rosrun usb_cam usb_cam_node (default : /dev/video0, [1920, 1080])
+
+        # run the executable with customized settings:
+        rosrun usb_cam usb_cam_node _video_device:=/dev/video{x} _image_width:={w} _image_height:={h}
+
 Preview the image (open another terminal):
 
         rosrun rqt_image_view rqt_image_view
@@ -69,7 +81,13 @@ publishes images as `sensor_msgs/Image` messages.
   
 * `image_size` - `integer_array`, default: `[1920, 1080]`
 
-    Width and height of the image.
+    Width and height of the image.  
+    Currently supported: `[1920, 1080]`, CLMU - `[2048, 1280]`
+
+* `cam` - `integer`, default: `6`
+
+    The number of camera channels.  
+    Currently supported: CLMU
 
 * Camera Control Parameters
 
