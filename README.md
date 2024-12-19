@@ -24,8 +24,13 @@ If you need to modify the code or ensure you have the latest update you will nee
 Publish camera images, using the parameters:
 
         # launch the usb_cam executable
-        CLEB-G-01A : roslaunch usb_cam v4l2_camera_cleb.launch
         CLV-G-Series : roslaunch usb_cam v4l2_camera_clv.launch
+
+        /* CLEB-G-01A */
+        # CLCC-G-01X
+        roslaunch usb_cam v4l2_camera_cleb.launch image_size:="[1920, 1080]" cam:={x}
+        # CLCC-G-02X
+        roslaunch usb_cam v4l2_camera_cleb.launch image_size:="[2048, 1280]" cam:={x}
 
         /* CLMU-G-Series */
         # CLCC-G-01X
@@ -33,7 +38,7 @@ Publish camera images, using the parameters:
         # CLCC-G-02X
         roslaunch usb_cam v4l2_camera_clmu.launch image_size:="[2048, 1280]" cam:={x}
 
-Note: If the number of camera channels you want to use is 3, you can enter cam:=3. default is 6.
+>Note: If the number of camera channels you want to use is 3, you can enter cam:=3.
 
         1CH camera (1 node)
         # run the executable with default settings:        
@@ -82,12 +87,16 @@ publishes images as `sensor_msgs/Image` messages.
 * `image_size` - `integer_array`, default: `[1920, 1080]`
 
     Width and height of the image.  
-    Currently supported: `[1920, 1080]`, CLMU - `[2048, 1280]`
+    Currently supported:  
+    CLMU-G-Series - `[1920, 1080]` `[2048, 1280]`  
+    CLEB-G-01A - `[1920, 1080]` `[2048, 1280]`
 
 * `cam` - `integer`, default: `6`
 
     The number of camera channels.  
-    Currently supported: CLMU
+    Currently supported:  
+    CLMU-G-Series(default: `6`)  
+    CLEB-G-01A(default: `4`)
 
 * Camera Control Parameters
 
