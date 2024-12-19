@@ -91,7 +91,7 @@ publishes images as `sensor_msgs/Image` messages.
     CLMU-G-Series - `[1920, 1080]` `[2048, 1280]`  
     CLEB-G-01A - `[1920, 1080]` `[2048, 1280]`
 
-* `cam` - `integer`, default: `6`
+* `cam` - `integer`
 
     The number of camera channels.  
     Currently supported:  
